@@ -1,26 +1,33 @@
-import { IsNotEmpty, IsNumber } from 'class-validator';
 import {
   Column,
   Entity,
+  ManyToMany,
   ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Categoria } from '../../Categoria/Entity/Categoria.Entity';
+  JoinTable,
+  PrimaryGeneratedColumn
+} from 'typeorm'
+import { Categoria} from '../../Categoria/Entity/Categoria.Entity'
+import { Usuario } from '../../Usuario/Entity/Usuario.Entity'
 
 @Entity({ name: 'tb_medicamentos' })
 export class Medicamento {
 
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
-  @IsNotEmpty()
   @Column({ length: 255, nullable: false })
-  nome: string;
+  nome: string
 
-  @IsNotEmpty()
   @Column({ length: 255, nullable: false })
-  laboratorio: string;
+  laboratorio: string
 
   @ManyToOne(() => Categoria, (categoria) => categoria.medicamentos)
-  categoria: Categoria;
+  categoria: Categoria
+
+  @ManyToMany(() => Usuario, (usuario) => usuario.medicamentos)
+  @JoinTable({
+    name: 'tb_usuario_medicamento'
+  })
+  usuarios: Usuario[]
 }
+
